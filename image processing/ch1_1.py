@@ -122,7 +122,8 @@ figure()
 subplot(121)
 imshow(im)
 subplot(122)
-show(1*im_open)
+im_open = 1*im_open
+show(im_open)
 print "Number of objects:", nbr_bojects
 print "Number of objects:", nbr_bojects_open
 
