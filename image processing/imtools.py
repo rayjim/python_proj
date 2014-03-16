@@ -2,10 +2,11 @@
 This file containing examples taken from computer vision with python
 author(implement): ray
 """
-#from PIL import Image
+from PIL import Image
 from pylab import *
 from numpy import *
 import os
+
 def get_imlist(path):
     """Returns a list of filenames for
     all jpg images in a directory"""
@@ -218,10 +219,8 @@ def plot_matches(im1,im2,locs1,locs2,matchscores,show_below=True)   :
         if m>0:
             plot([locs1[i][1],locs2[m][1]+cols1],[locs1[i][0],locs2[m][0]],'c')
             
-    
-    
-    
-    
+
+        
     
     
     
