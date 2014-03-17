@@ -9,18 +9,27 @@ import numpy as np
 import imtools
 from pylab import *
 
+im1_name = "Gomamugicha1L_1.jpg"
+im2_name = "Gomamugicha1L_2.jpg"
 
-im = np.array(Image.open('lena.png').convert('L'))
+im = np.array(Image.open(im1_name).convert('L'))
 harrisim = imtools.compute_harris_response(im)
 filtered_coords = imtools.get_harris_points(harrisim,6,threshold = 0.05)
+
 imtools.plot_harris_points(im, filtered_coords)
 
+
+im = np.array(Image.open(im2_name).convert('L'))
+harrisim = imtools.compute_harris_response(im)
+filtered_coords = imtools.get_harris_points(harrisim,6,threshold = 0.05)
+
+imtools.plot_harris_points(im, filtered_coords)
 
 ## matching
 figure()
 wid = 5
-im1 = np.array(Image.open('lena.png').convert('L'))
-im2 = np.array(Image.open('lena.png').convert('L'))
+im1 = np.array(Image.open(im1_name).convert('L'))
+im2 = np.array(Image.open(im2_name).convert('L'))
 
 
 harrisim = imtools.compute_harris_response(im1,5)
