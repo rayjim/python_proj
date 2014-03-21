@@ -6,7 +6,7 @@ Sift
 """
 ###############################################################################
 # Sift
-import Image
+from PIL import Image
 import os
 import numpy as np
 from pylab import *
@@ -19,7 +19,7 @@ def process_image(imagename,resultname,params="--edge-thresh 10 --peak-thresh 5"
        im.save('tmp.pgm')
        imagename ="tmp.pgm"
     
-    cmmd = str("./sift "+imagename+" --output "+resultname+" "+params)
+    cmmd = str("sift "+imagename+" --output "+resultname+" "+params)
     os.system(cmmd)
     print 'processed', imagename, 'to', resultname
     
