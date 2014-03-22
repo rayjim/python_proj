@@ -69,7 +69,7 @@ def match(desc1, desc2):
     desc2t = desc2.T
     for i in range(desc1_size[0]):
         dotprods = dot(desc1[i,:],desc2t)
-        dotprods = 0.9999+dotprods
+        dotprods = 0.9999*dotprods
         #inverse cosine and sort, return index for features in second image
         indx = argsort(arccos(dotprods))
         

@@ -11,6 +11,7 @@ import numpy as np
 from pylab import *
 import imtools
 
+close('all')
 imname = 'lena.png'
 im1 = np.array(Image.open(imname).convert('L'))
 im2 = np.array(Image.open(imname).convert('L'))
@@ -29,8 +30,8 @@ l2,d2 = sift.read_features_from_file('lena2.sift')
 
 
 print 'strarting matching'
-matches = imtools.match_twosided(d1,d2)
+matches = sift.match_twosided(d1,d2)
 
 gray()
-imtools.plot_matches(im1,im2,l1, l2, matches[:100])
+imtools.plot_matches(im1,im2,l1, l2, matches)
 show()
