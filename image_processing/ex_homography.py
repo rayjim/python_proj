@@ -18,3 +18,13 @@ figure()
 gray()
 imshow(im2)
 imshow(im2)
+
+
+# another example
+
+import warp as warp
+
+# example of affine warp of im1 onto im2
+
+im1 = np.array(Image.open('beatles.jpg').convert('L'))
+im2 = np.array(Image.open('billboard_for_rent.jpg').convert('L'))
