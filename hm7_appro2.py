@@ -18,7 +18,9 @@ NTTOL = 1e-9
 GRADTOL = 1e-3
 
 # generate random problem
-A = np.random.rand(m,n)
+np.random.seed(1)
+A= np.random.rand(m,n)
+
 ######### Approximate 2##################################
 
 vals = []
@@ -28,11 +30,12 @@ x = np.zeros((n,1))
 
 for iter in range(MAXITERS):
     
-     val = -np.sum(np.log(1-np.dot(A,x)))-np.sum(np.log(1-x**2))
+     val = -np.sum(np.log(1-np.dot(A,x)))-np.sum(np.log(1+x))-np.sum(np.log(1-x))
      vals.append(val)
      d = 1/(1-np.dot(A,x))
      grad = np.dot(A.transpose(),d)-1/(1+x)+1/(1-x)
-     hess = np.dot(np.dot(A.transpose(),np.diag((d**2)[:,0])),A)+np.diag((1/(1+x)**2+1/(1-x)**2)[:,0])
+     hess = np.dot(np.dot(A.transpose(),np.diag((d**2)[:,0])),A)+\
+     np.diag((1/(1+x)**2+1/(1-x)**2)[:,0])
      #H = hess
      H = np.diag(np.diag(hess))
      print "cond = ",np.linalg.cond(hess)
@@ -52,7 +55,8 @@ for iter in range(MAXITERS):
      while(np.max(np.dot(A,(x+t*v)))>=1) or (np.max(np.abs(x+t*v))>=1):
     #feasibility condition: value of log should be large
          t = BETA*t
-     while -np.sum(np.log(1-np.dot(A,x+t*v)))-np.sum(np.log(1-(x+t*v)**2))>val+ALPHA*t*fprime:
+     while -np.sum(np.log(1-np.dot(A,x+t*v)))-np.sum(np.log(1-(x+t*v)**2))>\
+     val+ALPHA*t*fprime:
          t = BETA*t
     
     # print 'second t',t
