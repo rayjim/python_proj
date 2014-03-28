@@ -8,6 +8,7 @@ Newton method approximation
 
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.io import loadmat
 #### The following is the implementation for gradient descent ###
 ### problem definition ###
 m = 200
@@ -20,13 +21,14 @@ NTTOL = 1e-9
 GRADTOL = 1e-3
 
 # generate random problem
-A = np.random.rand(m,nn)
+x=loadmat('data.mat')
+A = x['A']
 
 
 ######### Approximation 1 ##################################
 
 
-steps = [1,15,20,30]
+steps = [1,15,20,25]
 for elem in range(len(steps)):
     print "steps=",steps[elem]
     vals = []

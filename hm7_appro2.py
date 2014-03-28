@@ -6,6 +6,7 @@ approximate hessian with its diagnol
 """
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.io import loadmat
 #### The following is the implementation for gradient descent ###
 ### problem definition ###
 m = 200
@@ -19,8 +20,8 @@ GRADTOL = 1e-3
 
 # generate random problem
 np.random.seed(1)
-A= np.random.rand(m,n)
-
+x=loadmat('data.mat')
+A = x['A']
 ######### Approximate 2##################################
 
 vals = []
