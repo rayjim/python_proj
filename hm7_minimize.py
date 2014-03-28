@@ -9,8 +9,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 #### The following is the implementation for gradient descent ###
 ### problem definition ###
-m = 2000
-n = 1000
+m = 200
+n = 100
 plt.close('all')
 ALPHA = 0.01 # parameters for 
 BETA = 0.5
@@ -74,6 +74,7 @@ for iter in range(MAXITERS):
      hess = np.dot(np.dot(A.transpose(),np.diag((d**2)[:,0])),A)+np.diag((1/(1+x)**2+1/(1-x)**2)[:,0])
      v = -np.dot(np.linalg.inv(hess),grad)
      fprime =np.dot(grad.transpose(),v)
+     print 'iter = ',iter,np.linalg.norm(grad)
      if np.abs(fprime)<NTTOL:
          print 'finish'         
          break
