@@ -7,10 +7,11 @@ and newton method to solve unconstraint probelm
 """
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.io import loadmat
 #### The following is the implementation for gradient descent ###
 ### problem definition ###
-m = 20000
-n = 1000
+m = 200
+n = 100
 plt.close('all')
 ALPHA = 0.01 # parameters for 
 BETA = 0.5
@@ -19,8 +20,9 @@ NTTOL = 1e-8
 GRADTOL = 1e-3
 
 # generate random problem
-A = np.random.rand(m,n)
-
+#A = np.random.rand(m,n)
+x=loadmat('data.mat')
+A = x['A']
 #gradient method
 vals = []
 steps = []
