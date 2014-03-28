@@ -28,7 +28,7 @@ def H_from_points(fp,tp):
         
 # condition points(important for numerical reasons)
     m = np.mean(fp[:2],axis=1)
-    maxstd = max(np.std(fp[:2]),axis =1)+1e-9
+    maxstd = np.max(np.std(fp[:2]),axis =1)+1e-9
     C1 = np.diag([1/maxstd,1/maxstd,1])
     C1[0][2] = -m[0]/maxstd
     C1[1][2] = -m[1]/maxstd
@@ -36,7 +36,7 @@ def H_from_points(fp,tp):
     
     #--to points --
     m = np.mean(tp[:2],axis=1)
-    maxstd = np.max(np.std(tp[:2],axis =1))+1e-9
+    maxstd = max(np.std(tp[:2],axis =1))+1e-9
     C2= np.diag([1/maxstd,1/maxstd,1])
     C2[0][2] = -m[0]/maxstd
     C2[1][2] = -m[1]/maxstd
@@ -66,7 +66,7 @@ def Haffine_from_points(fp,tp):
         
     # condition points(important for numerical reasons)
     m = np.mean(fp[:2],axis=1)
-    maxstd = max(np.std(fp[:2]),axis =1)+1e-9
+    maxstd = np.max(np.std(fp[:2],axis=1))+1e-9
     C1 = np.diag([1/maxstd,1/maxstd,1])
     C1[0][2] = -m[0]/maxstd
     C1[1][2] = -m[1]/maxstd
@@ -74,8 +74,9 @@ def Haffine_from_points(fp,tp):
     
     #--to points --
     m = np.mean(tp[:2],axis=1)
-    maxstd = np.max(np.std(tp[:2],axis =1))+1e-9
-    C2= np.diag([1/maxstd,1/maxstd,1])
+    
+   # maxstd = np.max(np.std(tp[:2],axis =1))+1e-9
+    C2= C1.copy()
     C2[0][2] = -m[0]/maxstd
     C2[1][2] = -m[1]/maxstd
     tp_cond = np.dot(C2,tp)
@@ -83,7 +84,7 @@ def Haffine_from_points(fp,tp):
     # create matrix for linear method, 2 row for each correspondence pair
     A = np.concatenate((fp_cond[:2],tp_cond[:2]),axis=0)
           
-    U,S,V = np.linalg.svd(A)
+    U,S,V = np.linalg.svd(A.T)
     # create B and C matrices as hartley-zisserman
     tmp = V[:2].T
     B = tmp[:2]
