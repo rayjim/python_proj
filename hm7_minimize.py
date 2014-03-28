@@ -61,4 +61,37 @@ plt.figure(1)
 plt.semilogy(range(len(vals)),vals-optival,'_')
 plt.figure(2)
 plt.plot(range(len(steps)),steps,':',range(len(steps)),steps,'o')
-    
+
+######### Newton method ##################################
+vals = []
+steps = []
+
+x = np.zeros((n,1))
+
+for iter in range(MAXITERS):
+     val = -np.sum(np.log(1-np.dot(A,x)))-np.sum(np.log(1-x**2))
+     vals.append(val)
+     d = 1/(1-np.dot(A,x))
+     grad = np.dot(A.transpose(),d)-1/(1+x)+1/(1-x)
+     hess = np.dot(np.dot(A.transpose(),np.diag((d**2)[:,0])),A)+np.diag((1/(1+x)**2+1/(1-x)**2)[:,0])
+     v = -np.dot(np.linalg.inv(hess),grad)
+     fprime =np.dot(grad.transpose(),v)
+     print 'iter = ',iter,np.linalg.norm(grad)
+     if np.abs(fprime)<NTTOL:
+         print 'finish'         
+         break
+     t = 1
+     while(np.max(np.dot(A,(x+t*v)))>=1) or (np.max(np.abs(x+t*v))>=1):
+    #feasibility condition: value of log should be large
+         t = BETA*t
+     while -np.sum(np.log(1-np.dot(A,x+t*v)))-np.sum(np.log(1-(x+t*v)**2))>val+ALPHA*t*fprime:
+         t = BETA*t
+    #print 'second t',t
+     x = x+t*v
+     steps.append(t)
+print iter
+optival = vals[len(vals)-1]
+plt.figure(3)
+plt.semilogy(range(len(vals)),vals-optival,'-',range(len(vals)),vals-optival,'o')
+plt.figure(4)
+plt.plot(range(len(steps)),steps,'-',range(len(steps)),steps,'o')
