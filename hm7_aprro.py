@@ -9,10 +9,11 @@ Newton method approximation
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.io import loadmat
+import scipy.linalg as slin
 #### The following is the implementation for gradient descent ###
 ### problem definition ###
-m = 200
-nn = 100
+m = 2000
+nn = 1000
 plt.close('all')
 ALPHA = 0.01 # parameters for 
 BETA = 0.5
@@ -22,8 +23,8 @@ GRADTOL = 1e-3
 
 # generate random problem
 x=loadmat('data.mat')
-A = x['A']
-
+#A = x['A']
+A = np.random.rand(m,nn)
 
 ######### Approximation 1 ##################################
 
@@ -43,13 +44,15 @@ for elem in range(len(steps)):
         grad = np.dot(A.transpose(),d)-1/(1+x)+1/(1-x)
         if (iter%steps[elem]==0):
             hess = np.dot(np.dot(A.transpose(),np.diag((d**2)[:,0])),A)+np.diag((1/(1+x)**2+1/(1-x)**2)[:,0])
-            L = np.linalg.cholesky(hess)
+            #L = np.linalg.cholesky(hess)
+            L = slin.lu_factor(hess)
             flop_cum = nn**3/3
             print 'flop_cum for is',flop_cum
         else:
             flop_cum = 0
          
-        v = -np.dot(np.linalg.inv(L.transpose()),np.dot(np.linalg.inv(L),grad))
+       #v = -np.dot(np.linalg.inv(L.transpose()),np.dot(np.linalg.inv(L),grad))
+        v = -slin.lu_solve(L,grad)
         flop_cum = flop_cum+2*nn**2
         
         fprime =np.dot(grad.transpose(),v)
