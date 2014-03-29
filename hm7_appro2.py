@@ -22,6 +22,8 @@ GRADTOL = 1e-3
 np.random.seed(1)
 x=loadmat('data.mat')
 A = x['A']
+#A= np.random.rand(1,n)
+
 ######### Approximate 2##################################
 
 vals = []
