@@ -7,6 +7,8 @@ approximate hessian with its diagnol
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.io import loadmat
+import scipy as sci
+import time
 #### The following is the implementation for gradient descent ###
 ### problem definition ###
 m = 200
@@ -30,7 +32,7 @@ vals = []
 
 
 x = np.zeros((n,1))
-
+t1 = time.time()
 for iter in range(MAXITERS):
     
      val = -np.sum(np.log(1-np.dot(A,x)))-np.sum(np.log(1+x))-np.sum(np.log(1-x))
@@ -49,7 +51,8 @@ for iter in range(MAXITERS):
          break     
 
      #v = -np.dot(np.linalg.inv(H),grad)
-     v = -np.dot(np.linalg.inv(H),grad)
+     #v = -np.dot(np.linalg.inv(H),grad)
+     v = -np.linalg.solve(H,grad)
      fprime =np.dot(grad.transpose(),v)
     # print "decre = ",np.abs(fprime)
      if (fprime >0):
@@ -66,7 +69,8 @@ for iter in range(MAXITERS):
     
      x = x+t*v
 #############################################################
-
+t2 = time.time()
+print t2-t1,'sec'
 
 optival = vals[len(vals)-1]
 plt.figure(2)

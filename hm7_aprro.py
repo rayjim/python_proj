@@ -10,6 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.io import loadmat
 import scipy.linalg as slin
+import time
 #### The following is the implementation for gradient descent ###
 ### problem definition ###
 m = 2000
@@ -28,10 +29,11 @@ A = np.random.rand(m,nn)
 
 ######### Approximation 1 ##################################
 
-
-steps = [1,15,20,25]
+tt =[]
+steps = [1,10,20,30]
 for elem in range(len(steps)):
-    print "steps=",steps[elem]
+    t1 = time.time()
+    #print "steps=",steps[elem]
     vals = []
     x = np.zeros((nn,1))
     flops =[]
@@ -47,11 +49,12 @@ for elem in range(len(steps)):
             #L = np.linalg.cholesky(hess)
             L = slin.lu_factor(hess)
             flop_cum = nn**3/3
-            print 'flop_cum for is',flop_cum
+           # print 'flop_cum for is',flop_cum
         else:
             flop_cum = 0
          
-       #v = -np.dot(np.linalg.inv(L.transpose()),np.dot(np.linalg.inv(L),grad))
+        #v = -np.dot(np.linalg.inv(L.transpose()),np.dot(np.linalg.inv(L),grad))
+        #v = -np.linalg.solve(L.T,np.linalg.solve(L,grad))
         v = -slin.lu_solve(L,grad)
         flop_cum = flop_cum+2*nn**2
         
@@ -69,11 +72,14 @@ for elem in range(len(steps)):
         #   print 'second t',t
         x = x+t*v
     
-     
+        
     print iter
     optival = vals[len(vals)-1]
     cflops = np.cumsum(flops)
     plt.figure(1)
     plt.semilogy(cflops[0:len(vals)-1],vals[0:len(vals)-1]-optival,'-',cflops,vals-optival,'o',label="test")
+    t2 = time.time()
+    tt.append(t2-t1)
 
 
+print tt
