@@ -53,13 +53,13 @@ def rigid_alignment(faces,path,plotflag=False):
     set plotflag = True to plot images"""
     
     # take the points in the first image as reference points
-    refpoints = faces.values()
+    refpoints = faces.values()[0]
     for face in faces:
         points = faces[face]
         R,tx,ty = compute_rigid_transform(refpoints,points)
         T = np.array([[R[1][1],R[1][0]],[R[0][1],R[0][0]]])
         im = np.array(Image.open(os.path.join(path,face)))
-        im2 = np.array(im.shape,'uint8')
+        im2 = np.zeros(im.shape,'uint8')
         
         #warp each color channel
         for i in range(len(im.shape)):
