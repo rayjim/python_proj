@@ -131,7 +131,7 @@ class LinearLeastSquaresModel:
     def fit(self, data):
         A = numpy.vstack([data[:,i] for i in self.input_columns]).T
         B = numpy.vstack([data[:,i] for i in self.output_columns]).T
-        x,resids,rank,s = scipy.linalg.lstsq(A,B)
+        x,resids,rank,s = numpy.linalg.lstsq(A,B)
         return x
     def get_error( self, data, model):
         A = numpy.vstack([data[:,i] for i in self.input_columns]).T
@@ -170,15 +170,14 @@ def test():
     all_data = numpy.hstack( (A_noisy,B_noisy) )
     input_columns = range(n_inputs) # the first columns of the array
     output_columns = [n_inputs+i for i in range(n_outputs)] # the last columns of the array
-    debug = False
+    debug = True
     model = LinearLeastSquaresModel(input_columns,output_columns,debug=debug)
-
-    linear_fit,resids,rank,s = scipy.linalg.lstsq(all_data[:,input_columns],
-                                                  all_data[:,output_columns])
+    
+    linear_fit,resids,rank,s = numpy.linalg.lstsq(all_data[:,input_columns],all_data[:,output_columns])
 
     # run RANSAC algorithm
     ransac_fit, ransac_data = ransac(all_data,model,
-                                     50, 1000, 7e3, 300, # misc. parameters
+                                     5, 5000, 7e4, 50, # misc. parameters
                                      debug=debug,return_all=True)
     if 1:
         import pylab

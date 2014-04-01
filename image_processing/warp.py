@@ -96,23 +96,26 @@ def panorama(H,fromim,toim,padding=2400,delta=2400):
     the result is an image with the same height as to im,'padding'
     specifies the number of fill pixels and 'delta'adding additional translation."""
     # check if images are gray scale or color
-    is_color = len(fromim.shape)=3
+    is_color = len(fromim.shape)==3
     #homography translation for geometric_transform()
     def transf(p):
         p2 = np.dot(H,[p[0],p[1],1])
         return (p2[0]/p2[2],p2[1]/p2[2])
-    if H[1,2]<0:
-        print 'warp-right'
+    if H[1,2]<0: # fromim is to the right
+        print 'warp - right'
+        # transform fromim
         if is_color:
-            toim_t = np.hstack((toim,np.zeros((toim.shape[0],padding,3))))
-            fromim_t = np.zeros((toim.shape[0],toim.shape[1]+padding,toim.shape[2]))
+            # pad the destination image with zeros to the right
+            toim_t = hstack((toim,zeros((toim.shape[0],padding,3))))
+            fromim_t = zeros((toim.shape[0],toim.shape[1]+padding,toim.shape[2]))
             for col in range(3):
                 fromim_t[:,:,col] = ndimage.geometric_transform(fromim[:,:,col],
-                trasf,(toim.shape[0],toim.shape[1]+padding))
-            else:
-                toim_t = np.hstack((toim,np.zeros((toim.shape[0],padding))))
-                fromim_t = ndimage.geometric_transform(fromim,transf,(toim.shape[0],
-                            toim.shape[1]+padding))
+                                        transf,(toim.shape[0],toim.shape[1]+padding))
+        else:
+            # pad the destination image with zeros to the right
+            toim_t = hstack((toim,zeros((toim.shape[0],padding))))
+            fromim_t = ndimage.geometric_transform(fromim,transf,
+                                    (toim.shape[0],toim.shape[1]+padding)) 
     else:
          print 'warp - left'
          # add translation to compensate for padding to the left
