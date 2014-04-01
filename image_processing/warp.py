@@ -88,3 +88,5 @@ def plot_mesh(x,y,tri):
     for t in tri:
         t_ext = [t[0],t[1],t[2],t[0]]
         plot(x[t_ext],y[t_ext],'r')
+        
+#paranoma
