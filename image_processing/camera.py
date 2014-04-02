@@ -22,3 +22,8 @@ class Camera(object):
         for i in range(3):
             x[i]/=x[2]
         return x
+        
+def rotation_matrix(a):
+    R = np.eye(4)
+    R[:3,:3]= linalg.expm(np.array([[0,-a[2],a[1]],[a[2],0,-a[0]],[-a[1],a[0],0]]))
+    return R
