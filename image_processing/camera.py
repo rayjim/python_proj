@@ -35,6 +35,15 @@ class Camera(object):
         self.t = np.dot(linalg.inv(self.K),self.P[:,3])
         
         return self.K, self.R, self.t
+    def center(self):
+        """ compute and return the camera center."""
+        if self.c is not None:
+           return self.c
+        else:
+            # compute c by factoring
+           self.factor()
+           self.c=-np.dot(self.R.T,self.t)
+           return self.c
     
         
 def rotation_matrix(a):
