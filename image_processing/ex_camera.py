@@ -78,7 +78,7 @@ ndx2 = [int(matches[i]) for i in ndx]
 tp = homography.make_homog(l1[ndx2,:2].T)
 
 model = homography.RansacModel()
-# the original implemtation on the book is run
+# the original implemtation on the book is wrong by ray
 H, inliers = homography.H_from_ransac(fp,tp,model) 
 
 # camera calibration
@@ -131,4 +131,8 @@ axis('off')
 
 show()
 
+import pickle
 
+with open('ar_camera.pkl','w') as f:
+    pickle.dump(K,f)
+    pickle.dump(np.dot(np.linalg.inv(K),cam2.P),f)
