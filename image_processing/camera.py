@@ -46,8 +46,17 @@ class Camera(object):
            return self.c
     
         
-def rotation_matrix(a):
+def rotation_matrix(a)
     R = np.eye(4)
     R[:3,:3]= linalg.expm(np.array([[0,-a[2],a[1]],[a[2],0,-a[0]],[-a[1],a[0],0]]))
     return R
+#compute calibration matrix
+def my_calibration(sz):
+    row,col = sz
+    fx = 2555*col/2592
+    fy = 2586*row/1936
+    K = np.diag([fx,fy,1])
+    K[0,2] = 0.5*col
+    K[1,2] = 0.5*row
+    return K
     
