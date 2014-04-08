@@ -44,3 +44,12 @@ image_processing/data/sunset_tree.jpg
 image_processing/data/sunsets.zip
 image_processing/data/turningtorso1.jpg
 image_processing/data/turningtorso1_points.txt
+image_processing/msvcr90.dll
+image_processing/sift.exe
+image_processing/vl.dll
+/image_processing/data
+/image_processing/gwb_cropped
+/image_processing/image
+/image_processing/sfm/2D
+/image_processing/sfm/3D
+/image_processing/sfm/images
