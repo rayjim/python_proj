@@ -55,3 +55,24 @@ def plot_epipolar_line(im,F,x,epipole=None,show_epipole=True):
         if epipoleisNone:
             epipole=compute_epipole(F)
     plot(epipole[0]/epipole[2],epipole[1]/epipole[2],'r*')
+    
+def triangulate_point(x1,x2,P1,P2):
+    """Pointpairtriangulationfrom
+    leastsquaressolution."""
+    M=zeros((6,6))
+    M[:3,:4]=P1
+    M[3:,:4]=P2
+    M[:3,4]=-x1
+    M[3:,5]=-x2
+    U,S,V=linalg.svd(M)
+    X=V[-1,:4]
+    return X/X[3]
+
+def triangulate(x1,x2,P1,P2):
+    """Two-viewtriangulationofpointsin
+    x1,x2(3*nhomog.coordinates)."""
+    n=x1.shape[1]
+    if x2.shape[1]!=n:
+        raise ValueError("Numberofpointsdon’tmatch.")
+    X=[triangulate_point(x1[:,i],x2[:,i],P1,P2) for i in range(n)]
+    return array(X).T
