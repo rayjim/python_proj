@@ -15,10 +15,10 @@ from PIL import Image
 K=array([[2394,0,932],[0,2398,628],[0,0,1]])
 #loadimagesandcomputefeatures
 im1=array(Image.open('alcatraz1.jpg'))
-sift.process_image('alcatraz1.jpg','im1.sift')
+#sift.process_image('alcatraz1.jpg','im1.sift')
 l1,d1=sift.read_features_from_file('im1.sift')
 im2=array(Image.open('alcatraz2.jpg'))
-sift.process_image('alcatraz2.jpg','im2.sift')
+#sift.process_image('alcatraz2.jpg','im2.sift')
 l2,d2=sift.read_features_from_file('im2.sift')
 #matchfeatures
 matches=sift.match_twosided(d1,d2)
