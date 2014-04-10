@@ -15,8 +15,12 @@ imname = "../lena.png"
 im1 = np.array(Image.open(imname).convert('L'))
 im2 = np.array(Image.open(imname).convert('L'))
 #im1_gradx = ndimage.sobel(im1,axis=0,mode='constant')
-im1_gradx, im1_grady = np.gradient(im1)
+#im1_gradx, im1_grady = np.gradient(im1)
 #im1_grady = ndimage.sobel(im1,axis=1,mode='constant')
+mx=array([[-1,0,1],[-1,0,1],[-1,0,1]])
+my=array([[-1,-1,-1],[0,0,0],[1,1,1]])
+im1_gradx = ndimage.convolve(im1,mx)
+im1_grady = ndimage.convolve(im1,my)
 gray()
 MAXITERS = 1000
 P = np.ones((2,3))*.5
