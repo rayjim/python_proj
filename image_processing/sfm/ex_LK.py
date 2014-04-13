@@ -13,9 +13,10 @@ from scipy.linalg import block_diag
 
 imname = "../lena.png"
 im0 = np.array(Image.open(imname).convert('L')).astype('float')
-P_true = np.array([[1.1,0.1,0],[0.1,1.1,0]])
-im1 = ndimage.affine_transform(im0,P_true[:2,:2],(P_true[0,2],P_true[1,2]))
-im2 = np.array(Image.open(imname).convert('L')).astype('float')
+P_true = np.array([[2.2,0.1,0],[0.4,2.2,0]])
+im2 = ndimage.affine_transform(im0,P_true[:2,:2],(P_true[0,2],P_true[1,2]))
+im1 = im0
+#im2 = np.array(Image.open(imname).convert('L')).astype('float')
 #im2 = im1
 #im1_gradx = ndimage.sobel(im1,axis=0,mode='constant')
 im1_gradx, im1_grady = np.gradient(im1)
@@ -25,10 +26,10 @@ my=array([[-1,-1,-1],[0,0,0],[1,1,1]])
 #im1_gradx = ndimage.convolve(im1,mx)
 #im1_grady = ndimage.convolve(im1,my)
 gray()
-MAXITERS = 1000
+MAXITERS = 2000
 #P = np.ones((1,6))
-P=np.ones((2,3))
-P = np.array([[1.1,0.1,1],[0.1,0.9,1]])
+#P=np.ones((2,3))
+P = np.array([[1,0,1],[0,1,1]])
 def p_jacob(x,y):
     return np.array([[x,0,y,0,1,0],[0,x,0,y,0,1]])
 #generate jacobian
@@ -45,6 +46,8 @@ def imshow_grad(im):
     imshow((im+255)/2)
 close('all')
 p_val = []
+figure()
+plt.xlim([0,MAXITERS])
 
 for iter in range(MAXITERS):
     # form image 
@@ -78,11 +81,11 @@ for iter in range(MAXITERS):
     d = np.dot(sd.T,(im_E).flatten())
     #step 8
     delta = np.linalg.solve(H,d)
-  #  print np.linalg.norm(delta)
-    #plot(iter,np.linalg.norm(delta),'b+')
-    #plt.draw()
+    print np.linalg.norm(delta)
+    plot(iter,np.linalg.norm(delta),'bo')
+    plt.draw()
     #plt.clf()
-   # print P
+    #print P
     p_val.append(delta)
     P = (P.T.flatten()+delta).reshape(3,2).T
 
