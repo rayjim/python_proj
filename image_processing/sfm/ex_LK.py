@@ -43,6 +43,8 @@ delta = 500
 def imshow_grad(im):
     """show gradient image by change the dynamic ranges"""
     imshow((im+255)/2)
+close('all')
+p_val = []
 
 for iter in range(MAXITERS):
     # form image 
@@ -77,12 +79,17 @@ for iter in range(MAXITERS):
     #step 8
     delta = np.linalg.solve(H,d)
   #  print np.linalg.norm(delta)
+    #plot(iter,np.linalg.norm(delta),'b+')
+    #plt.draw()
+    #plt.clf()
    # print P
+    p_val.append(delta)
     P = (P.T.flatten()+delta).reshape(3,2).T
 
-
+figure()
 imshow(im_E)
-
+figure()
+plt.plot()
 
 #test code
 res = []
