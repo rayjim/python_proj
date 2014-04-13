@@ -13,7 +13,7 @@ from scipy.linalg import block_diag
 
 imname = "../lena.png"
 im0 = np.array(Image.open(imname).convert('L')).astype('float')
-P_true = np.array([[1,0,5],[0,1,8]])
+P_true = np.array([[1.1,0.1,0],[0.1,1.1,0]])
 im1 = ndimage.affine_transform(im0,P_true[:2,:2],(P_true[0,2],P_true[1,2]))
 im2 = np.array(Image.open(imname).convert('L')).astype('float')
 #im2 = im1
@@ -47,7 +47,7 @@ def imshow_grad(im):
 for iter in range(MAXITERS):
     # form image 
     
-    if (np.linalg.norm(delta)<10e-4):
+    if (np.linalg.norm(delta)<10e-6):
         print "over at ",iter,"iterations"
         
         break;
@@ -76,8 +76,8 @@ for iter in range(MAXITERS):
     d = np.dot(sd.T,(im_E).flatten())
     #step 8
     delta = np.linalg.solve(H,d)
-    print np.linalg.norm(delta)
-    print P
+  #  print np.linalg.norm(delta)
+   # print P
     P = (P.T.flatten()+delta).reshape(3,2).T
 
 
