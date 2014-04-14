@@ -56,3 +56,4 @@ image_processing/vl.dll
 *.pgm
 image_processing/sfm/msvcr90.dll
 image_processing/sfm/sift.exe
+image_processing/sfm/lkopticalflow.py
