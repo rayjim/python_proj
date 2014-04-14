@@ -16,7 +16,7 @@ im0 = np.array(Image.open(imname).convert('L')).astype('float')
 width = 500
 height = 420
 im0 = ndimage.zoom(im0,0.9,order = 0)
-P_true = np.array([[1.6,0.1,10],[0.4,0.6,0]])
+P_true = np.array([[2.3,-0.6,-30],[0.6,2.3,15]])
 im2 = ndimage.affine_transform(im0,P_true[:2,:2],(P_true[0,2],P_true[1,2]))
 im1 = im0
 #im2 = np.array(Image.open(imname).convert('L')).astype('float')
@@ -32,9 +32,12 @@ gray()
 MAXITERS =5000
 #P = np.ones((1,6))
 #P=np.ones((2,3))
-P = np.array([[1,0.1,1],[0.1,1.1,0]])#np.array([[1,0,0],[0,1,0]])
+P = np.array([[2,-3],[0.3,1]])#np.array([[1,0,0],[0,1,0]])
 def p_jacob(x,y):
-    return np.array([[x,0,y,0,1,0],[0,x,0,y,0,1]])
+    return np.array([[x,-y,1,0],[y,x,0,1]])
+def p_form(p): # form transformation matrix
+    return np.array([[p[0,0],-p[1,0]],[p[1,0],p[0,0]]])
+
 #generate jacobian
 #r = np.array([])
 #for i in range(im1.shape[0]):
@@ -54,21 +57,23 @@ p_val = []
 ALPHA = 0.1 # parameters for 
 BETA = 0.5
  #step1: Warp image1
-im_W = ndimage.affine_transform(im1,P[:2,:2],(P[0,2],P[1,2]))
-    #print np.linalg.norm(im_W)
-    #step2: compute the error image
-im_E = (im2 - im_W.astype('float')).flatten()
+
+
 for iter in range(MAXITERS):
     # form image 
     
+    im_W = ndimage.affine_transform(im1,p_form(P),(P[0,1],P[1,1]))
+    #print np.linalg.norm(im_W)
+    #step2: compute the error image
+    im_E = (im2 - im_W.astype('float')).flatten()
     if (np.linalg.norm(delta)<10e-6):
         print "over at ",iter,"iterations"
         
         break;
    
     #step3: Warp the gradiant
-    imx_W = ndimage.affine_transform(im1_gradx,P[:2,:2],(P[0,2],P[1,2]))
-    imy_W = ndimage.affine_transform(im1_grady,P[:2,:2],(P[0,2],P[1,2]))
+    imx_W = ndimage.affine_transform(im1_gradx,p_form(P),(P[0,1],P[1,1]))
+    imy_W = ndimage.affine_transform(im1_grady,p_form(P),(P[0,1],P[1,1]))
     #im_W = np.vstack((imx_W.flatten(),imy_W.flatten()))
     res = []
     test = []
@@ -86,10 +91,10 @@ for iter in range(MAXITERS):
     d = np.dot(sd.T,(im_E))
     #step 8
     delta = np.linalg.solve(H,d)
-    P_delta = (P.T.flatten()+delta).reshape(3,2).T
+    P = (P.T.flatten()+delta).reshape(2,2).T
     #print np.linalg.norm(delta)
-    im_Wnew = ndimage.affine_transform(im1,P_delta[:2,:2],(P_delta[0,2],P_delta[1,2]))
-    im_Enew = (im2 -im_Wnew).flatten()
+    #im_Wnew = ndimage.affine_transform(im1,p_form(P_delta),(P_delta[0,1],P_delta[1,1]))
+    #im_Enew = (im2 -im_Wnew).flatten()
     t = 1
     
 #    while (np.linalg.norm(im_Enew)>np.linalg.norm(im_E+np.dot(sd,delta)*ALPHA*t)):
@@ -105,14 +110,13 @@ for iter in range(MAXITERS):
     print 't = ', t
     print np.linalg.norm(delta)
     p_val.append(np.linalg.norm(delta))
-    im_E = im_Enew.copy()
+    #im_E = im_Enew.copy()
    
     #p_val.append(delta)
     #delta.reshape(3.2).T
     #print np.linalg.norm(im_E)
    # P = (P.T.flatten()+delta*t).reshape(3,2).T
-    P = P_delta.copy()
-
+    #P = P_delta.copy()
 
 
 imshow(im_E.reshape(im1.shape))
