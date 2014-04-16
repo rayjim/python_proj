@@ -10,7 +10,7 @@ close('all')
 class1 = 1.5 * randn(100,2)
 class2 = randn(100,2) + array([5,5])
 features = vstack((class1,class2))
-centroids,variance = kmeans(features,3)
+centroids,variance = kmeans(features,2)
 code,distance = vq(features,centroids)
 figure()
 ndx = where(code==0)[0] 

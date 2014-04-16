@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
 """
+Created on Tue Apr 15 10:41:57 2014
+
+@author: admin
+"""
+
+# -*- coding: utf-8 -*-
+"""
 Created on Thu Apr 10 18:05:15 2014
 LK 
 @author: admin
@@ -29,7 +36,7 @@ my=array([[-1,-1,-1],[0,0,0],[1,1,1]])
 #im1_gradx = ndimage.convolve(im1,mx)
 #im1_grady = ndimage.convolve(im1,my)
 gray()
-MAXITERS =5000
+MAXITERS =1
 #P = np.ones((1,6))
 #P=np.ones((2,3))
 P = np.array([[1,0.1,1],[0.1,1.1,0]])#np.array([[1,0,0],[0,1,0]])
@@ -43,7 +50,7 @@ def p_jacob(x,y):
 #        r = block_diag(r,p_jacob(i,j))
 #    
 e = 10e-5
-delta = 500
+#delta = 10
 def imshow_grad(im):
     """show gradient image by change the dynamic ranges"""
     imshow((im+255)/2)
@@ -61,7 +68,7 @@ im_E = (im2 - im_W.astype('float')).flatten()
 for iter in range(MAXITERS):
     # form image 
     
-    if (np.linalg.norm(sd)<10e-3):
+    if (np.linalg.norm(grad)<10e-3):
         print "over at ",iter,"iterations"
         
         break;
@@ -79,23 +86,19 @@ for iter in range(MAXITERS):
            
     sd = np.array(res)
     ta = np.array(test)
-    #hessian
-    #step6
-    H = np.dot(sd.T,sd)
-    #step7
-    d = np.dot(sd.T,(im_E))
-    #step 8
-    delta = np.linalg.solve(H,d)
+    grad = np.dot(im_E,sd)
+
+    delta = -grad
     P_delta = (P.T.flatten()+delta).reshape(3,2).T
     #print np.linalg.norm(delta)
     im_Wnew = ndimage.affine_transform(im1,P_delta[:2,:2],(P_delta[0,2],P_delta[1,2]))
     im_Enew = (im2 -im_Wnew).flatten()
     t = 1
     
-    while np.dot(im_Enew.T,im_Enew)>np.dot(im_E.T,im_E)+np.dot(sd.T,np.dot(sd,delta))*ALPHA*t:
+    while np.dot(im_Enew.T,im_Enew)>np.dot(im_E.T,im_E)+np.dot(grad.T,delta)*ALPHA*t:
         t = t*BETA
         print 't = ', t
-        t_delta = t*delta
+        t_delta = t*t_delta
         P_delta = (P.T.flatten()+t_delta).reshape(3,2).T
         im_Wnew = ndimage.affine_transform(im1,P_delta[:2,:2],(P_delta[0,2],P_delta[1,2]))
         im_Enew = (im2 -im_Wnew).flatten()
@@ -109,7 +112,7 @@ for iter in range(MAXITERS):
    
     #p_val.append(delta)
     #delta.reshape(3.2).T
-    print np.linalg.norm(sd)
+    print np.linalg.norm(delta)
    # P = (P.T.flatten()+delta*t).reshape(3,2).T
     P = P_delta.copy()
 
