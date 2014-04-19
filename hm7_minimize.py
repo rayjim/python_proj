@@ -44,7 +44,7 @@ for iter in range(MAXITERS):
     ### backtracking step
     t = 1
     while(np.max(np.dot(A,(x+t*v)))>=1) or (np.max(np.abs(x+t*v))>=1):
-    #feasibility condition: value of log should be large
+    #feasibility condition: value of log should be large than zero
         t = BETA*t
     #print 'first t',t
     #print -np.sum(np.log(1-np.dot(A,x+t*v))-np.sum(np.log(1-(x+t*v)**2)))
