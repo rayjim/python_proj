@@ -219,7 +219,29 @@ def plot_matches(im1,im2,locs1,locs2,matchscores,show_below=True)   :
         if m>0:
             plot([locs1[i][1],locs2[m][1]+cols1],[locs1[i][0],locs2[m][0]],'c')
             
-
+def plot_2D_boundary(plot_range,points,decisionfcn,labels,values=[0]):
+    """Plot_rangeis(xmin,xmax,ymin,ymax),pointsisalist
+    ofclasspoints,decisionfcnisafuntiontoevaluate,
+    labelsisalistoflabelsthatdecisionfcnreturnsforeachclass,
+    valuesisalistofdecisioncontourstoshow."""
+    clist=['b','r','g','k','m','y']#colorsfortheclasses
+    #evaluateonagridandplotcontourofdecisionfunction
+    x=arange(plot_range[0],plot_range[1],.1)
+    y=arange(plot_range[2],plot_range[3],.1)
+    xx,yy=meshgrid(x,y)
+    xxx,yyy=xx.flatten(),yy.flatten()#listsofx,yingrid
+    zz=array(decisionfcn(xxx,yyy))
+    zz=zz.reshape(xx.shape)
+    #plotcontour(s)atvalues
+    contour(xx,yy,zz,values)
+    
+    for i in range(len(points)):
+        d=decisionfcn(points[i][:,0],points[i][:,1])
+        correct_ndx=labels[i]==d
+        incorrect_ndx=labels[i]!=d
+        plot(points[i][correct_ndx,0],points[i][correct_ndx,1],'*',color=clist[i])
+        plot(points[i][incorrect_ndx,0],points[i][incorrect_ndx,1],'o',color=clist[i])
+    axis('equal')
         
     
     
