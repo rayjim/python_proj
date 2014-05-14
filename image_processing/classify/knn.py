@@ -29,5 +29,6 @@ class KnnClassifier(object):
         
 def L2dist(p1,p2):
     return np.sqrt(sum((p1-p2)**2))
+    
 
 
