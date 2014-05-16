@@ -50,20 +50,45 @@ print 'Accuracy:', acc
 file_tools.print_confusion(res,test_labels,classnames)
 
 
-#for the gesture recognition case
+##use bayesen
+#
+#import pca
+#import bayes
+#V,S,m = pca.pca(features)
+#V = V[:50]
+#features=np.array([np.dot(V,f-m) for f in features])
+#test_features=np.array([np.dot(V,f-m) for f in test_features])
+#bc = bayes.BayesClassifier()
+#blist = [features[where(labels==c)[0]] for c in classnames]
+#bc.train(blist,classnames)
+#res = bc.classify(test_features)[0]
+#acc = sum(1.0*(res==test_labels))/len(test_labels)
+#print 'Accuracy',acc
+#
+#file_tools.print_confusion(res,test_labels,classnames)
 
-import pca
-import bayes
-V,S,m = pca.pca(features)
-V = V[:50]
-features=np.array([np.dot(V,f-m) for f in features])
-test_features=np.array([np.dot(V,f-m) for f in test_features])
-bc = bayes.BayesClassifier()
-blist = [features[where(labels==c)[0]] for c in classnames]
-bc.train(blist,classnames)
-res = bc.classify(test_features)[0]
-acc = sum(1.0*(res==test_labels))/len(test_labels)
-print 'Accuracy',acc
+#use svm
+def convert_labels(labels,transl): 
+  """ Convert between strings and numbers. """ 
+  return [transl[l] for l in labels]
+from svmutil import *
+features=map(list,features)
+test_features=map(list,test_features)
+#create conversion function for the labels
+transl={}
+for i,c in enumerate(classnames):
+    transl[c],transl[i]=i,c
+#createSVM
+prob=svm_problem(convert_labels(labels,transl),features)
+param=svm_parameter('-t 0')
+#train SVM on data
+m=svm_train(prob,param)
+#howdidthetrainingdo?
+res=svm_predict(convert_labels(labels,transl),features,m)
+#testtheSVM
+res=svm_predict(convert_labels(test_labels,transl),test_features,m)[0]
+res=convert_labels(res,transl)
 
+acc=sum(1.0*(res==test_labels))/len(test_labels)
+print 'Accuracy:',acc
 file_tools.print_confusion(res,test_labels,classnames)
-
