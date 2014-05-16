@@ -19,7 +19,7 @@ def build_bayes_graph(im,labels,sigma=1e2,kappa=1):
     m,n = im.shape[:2]
     
     # RGB vector version (one pixel per row)
-    vim = im.reshape((-1,3))
+    vim = im.copy().reshape((-1,3))
     
     # RGB for foreground and background
     foreground = im[labels==1].reshape((-1,3))
