@@ -62,16 +62,3 @@ print "Done in ", t2-t1,"sec"
 print 'error is', np.linalg.norm(x_eff-x_gen.flatten())/np.linalg.norm(x_gen)
 
 
-from scipy import optimize
-print "Using optimazatin tools"
-def f(x):
-#    e = np.ones((n,1))
-#    D = sci.sparse.spdiags(np.hstack((-e,2*e,-e)).T,np.array([-1,0,1]),n,n)
-#    D.data[1,0]=1
-#    D.data[1,n-1]=1
-    return np.linalg.norm(np.dot(A,x)-b)+np.linalg.norm(np.dot(D.todense(),x))+np.linalg.norm(x)
-t1 = time.time()
-x_0 = np.zeros((2000,1))
-optimize.fmin_bfgs(f,x_0)
-t2 = time.time()
-print "using ", t2-t1,"sec"

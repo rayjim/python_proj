@@ -12,7 +12,7 @@ def process_image(imagename,resultname,params="--edge-thresh 10 --peak-thresh 5"
         im = Image.open(imagename).convert('L')
         im.save('tmp.pgm')
         imagename = 'tmp.pgm'
- 
+
     cmmd = str("sift "+imagename+" --output="+resultname+
                 " "+params)
     print cmmd
